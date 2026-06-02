@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+c_roundtrip
+*.o
+.DS_Store

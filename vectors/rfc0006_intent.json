@@ -1,0 +1,317 @@
+{
+  "rfc": "RFC-0006",
+  "title": "IntentObservation wire format",
+  "abi_version": 1,
+  "observation_size": 32,
+  "wire": "<QHH4sQ8s",
+  "provenance": "byte-for-byte equivalent of axonos-sdk; verified in CI",
+  "valid_vectors": [
+    {
+      "id": "dir_up",
+      "desc": "Direction.Up @ conf=1.0",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 65535,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e8030000000000000100ffff000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "dir_right",
+      "desc": "Direction.Right @ conf=1.0",
+      "input": {
+        "kind": "direction",
+        "value": "Right",
+        "confidence_raw": 65535,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e8030000000000000100ffff010000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "dir_down",
+      "desc": "Direction.Down @ conf=1.0",
+      "input": {
+        "kind": "direction",
+        "value": "Down",
+        "confidence_raw": 65535,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e8030000000000000100ffff020000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "dir_left",
+      "desc": "Direction.Left @ conf=1.0",
+      "input": {
+        "kind": "direction",
+        "value": "Left",
+        "confidence_raw": 65535,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e8030000000000000100ffff030000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "dir_neutral",
+      "desc": "Direction.Neutral @ conf=1.0",
+      "input": {
+        "kind": "direction",
+        "value": "Neutral",
+        "confidence_raw": 65535,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e8030000000000000100ffff040000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "load_low",
+      "desc": "Load.Low @ conf=0.5",
+      "input": {
+        "kind": "load",
+        "value": "Low",
+        "confidence_raw": 32768,
+        "timestamp_us": 2000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "d00700000000000002000080000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "load_moderate",
+      "desc": "Load.Moderate @ conf=0.5",
+      "input": {
+        "kind": "load",
+        "value": "Moderate",
+        "confidence_raw": 32768,
+        "timestamp_us": 2000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "d00700000000000002000080010000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "load_high",
+      "desc": "Load.High @ conf=0.5",
+      "input": {
+        "kind": "load",
+        "value": "High",
+        "confidence_raw": 32768,
+        "timestamp_us": 2000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "d00700000000000002000080020000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "quality_high",
+      "desc": "Quality.High (confidence forced to u16::MAX)",
+      "input": {
+        "kind": "quality",
+        "value": "High",
+        "confidence_raw": 0,
+        "timestamp_us": 3000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "b80b0000000000000300ffff000000000807060504030201a0a1a2a3a4a5a6a7",
+      "note": "quality_raw must be 65535 regardless of input"
+    },
+    {
+      "id": "quality_moderate",
+      "desc": "Quality.Moderate (confidence forced to u16::MAX)",
+      "input": {
+        "kind": "quality",
+        "value": "Moderate",
+        "confidence_raw": 0,
+        "timestamp_us": 3000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "b80b0000000000000300ffff010000000807060504030201a0a1a2a3a4a5a6a7",
+      "note": "quality_raw must be 65535 regardless of input"
+    },
+    {
+      "id": "quality_low",
+      "desc": "Quality.Low (confidence forced to u16::MAX)",
+      "input": {
+        "kind": "quality",
+        "value": "Low",
+        "confidence_raw": 0,
+        "timestamp_us": 3000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "b80b0000000000000300ffff020000000807060504030201a0a1a2a3a4a5a6a7",
+      "note": "quality_raw must be 65535 regardless of input"
+    },
+    {
+      "id": "quality_nosignal",
+      "desc": "Quality.NoSignal (confidence forced to u16::MAX)",
+      "input": {
+        "kind": "quality",
+        "value": "NoSignal",
+        "confidence_raw": 0,
+        "timestamp_us": 3000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "b80b0000000000000300ffff030000000807060504030201a0a1a2a3a4a5a6a7",
+      "note": "quality_raw must be 65535 regardless of input"
+    }
+  ],
+  "boundary_vectors": [
+    {
+      "id": "q016_zero",
+      "desc": "Direction.Up @ quality_raw=0",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 0,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e80300000000000001000000000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "q016_lsb",
+      "desc": "Direction.Up @ quality_raw=1",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 1,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e80300000000000001000100000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "q016_half",
+      "desc": "Direction.Up @ quality_raw=32768",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 32768,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e80300000000000001000080000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "q016_max",
+      "desc": "Direction.Up @ quality_raw=65535",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 65535,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e8030000000000000100ffff000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "q016_round_093",
+      "desc": "Direction.Up @ quality_raw=60948",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 60948,
+        "timestamp_us": 1000,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "e803000000000000010014ee000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "ts_zero",
+      "desc": "timestamp_us = 0",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 65535,
+        "timestamp_us": 0,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "00000000000000000100ffff000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "ts_u64max",
+      "desc": "timestamp_us = u64::MAX (full 64-bit, no 2^48 bound)",
+      "input": {
+        "kind": "direction",
+        "value": "Up",
+        "confidence_raw": 65535,
+        "timestamp_us": 18446744073709551615,
+        "session_id": 72623859790382856,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "ffffffffffffffff0100ffff000000000807060504030201a0a1a2a3a4a5a6a7"
+    },
+    {
+      "id": "session_u64max",
+      "desc": "session_id = u64::MAX",
+      "input": {
+        "kind": "load",
+        "value": "High",
+        "confidence_raw": 46530,
+        "timestamp_us": 4000,
+        "session_id": 18446744073709551615,
+        "attestation": "a0a1a2a3a4a5a6a7"
+      },
+      "expected_hex": "a00f0000000000000200c2b502000000ffffffffffffffffa0a1a2a3a4a5a6a7"
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "id": "len_31",
+      "desc": "31-byte record rejected",
+      "class": "size",
+      "authority": "normative",
+      "wire_hex": "e8030000000000000100ffff000000000807060504030201a0a1a2a3a4a5a6",
+      "reason": "length 31 != 32"
+    },
+    {
+      "id": "len_33",
+      "desc": "33-byte record rejected",
+      "class": "size",
+      "authority": "normative",
+      "wire_hex": "e8030000000000000100ffff000000000807060504030201a0a1a2a3a4a5a6a700",
+      "reason": "length 33 != 32"
+    },
+    {
+      "id": "q016_overflow",
+      "desc": "quality_raw = 65536 out of Q0.16 range",
+      "class": "range",
+      "authority": "normative",
+      "reason": "Q0.16 raw must be <= 65535"
+    },
+    {
+      "id": "strict_unknown_kind",
+      "desc": "kind_tag=0x00FF",
+      "class": "strict_optional",
+      "authority": "rfc_normative",
+      "wire_hex": "e803000000000000ff00ffff000000000807060504030201a0a1a2a3a4a5a6a7",
+      "note": "this reference decodes kind=unknown; reject only if RFC-0006 mandates strict"
+    },
+    {
+      "id": "strict_nonzero_reserved",
+      "desc": "reserved payload bytes != 0",
+      "class": "strict_optional",
+      "authority": "rfc_normative",
+      "wire_hex": "e8030000000000000100ffff000909090807060504030201a0a1a2a3a4a5a6a7",
+      "note": "this reference ignores reserved bytes; reject only if RFC-0006 mandates strict"
+    }
+  ]
+}

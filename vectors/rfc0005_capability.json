@@ -1,0 +1,149 @@
+{
+  "rfc": "RFC-0005",
+  "title": "Capability manifest bitfield",
+  "wire": "<I",
+  "valid_mask": 15,
+  "bits": {
+    "Navigation": 0,
+    "WorkloadAdvisory": 1,
+    "SessionQuality": 2,
+    "ArtifactEvents": 3
+  },
+  "provenance": "byte-for-byte equivalent of axonos-sdk; verified in CI",
+  "valid_vectors": [
+    {
+      "id": "empty",
+      "desc": "Empty manifest",
+      "input": {
+        "capabilities": []
+      },
+      "expected_hex": "00000000",
+      "expected": {
+        "raw": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "single_navigation",
+      "desc": "Singleton: Navigation",
+      "input": {
+        "capabilities": [
+          "Navigation"
+        ]
+      },
+      "expected_hex": "01000000",
+      "expected": {
+        "raw": 1,
+        "valid": true
+      }
+    },
+    {
+      "id": "single_workloadadvisory",
+      "desc": "Singleton: WorkloadAdvisory",
+      "input": {
+        "capabilities": [
+          "WorkloadAdvisory"
+        ]
+      },
+      "expected_hex": "02000000",
+      "expected": {
+        "raw": 2,
+        "valid": true
+      }
+    },
+    {
+      "id": "single_sessionquality",
+      "desc": "Singleton: SessionQuality",
+      "input": {
+        "capabilities": [
+          "SessionQuality"
+        ]
+      },
+      "expected_hex": "04000000",
+      "expected": {
+        "raw": 4,
+        "valid": true
+      }
+    },
+    {
+      "id": "single_artifactevents",
+      "desc": "Singleton: ArtifactEvents",
+      "input": {
+        "capabilities": [
+          "ArtifactEvents"
+        ]
+      },
+      "expected_hex": "08000000",
+      "expected": {
+        "raw": 8,
+        "valid": true
+      }
+    },
+    {
+      "id": "nav_quality",
+      "desc": "Navigation + SessionQuality",
+      "input": {
+        "capabilities": [
+          "Navigation",
+          "SessionQuality"
+        ]
+      },
+      "expected_hex": "05000000",
+      "expected": {
+        "raw": 5,
+        "valid": true
+      }
+    },
+    {
+      "id": "all",
+      "desc": "Full catalogue (all four)",
+      "input": {
+        "capabilities": [
+          "Navigation",
+          "WorkloadAdvisory",
+          "SessionQuality",
+          "ArtifactEvents"
+        ]
+      },
+      "expected_hex": "0f000000",
+      "expected": {
+        "raw": 15,
+        "valid": true
+      }
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "id": "reserved_bit4",
+      "desc": "reserved bit 4 set",
+      "class": "reserved_bits",
+      "authority": "normative",
+      "wire_hex": "10000000",
+      "reason": "reserved bits (4..31) must be zero"
+    },
+    {
+      "id": "reserved_bit7",
+      "desc": "reserved bit 7 set",
+      "class": "reserved_bits",
+      "authority": "normative",
+      "wire_hex": "80000000",
+      "reason": "reserved bits (4..31) must be zero"
+    },
+    {
+      "id": "reserved_high",
+      "desc": "all reserved bits set",
+      "class": "reserved_bits",
+      "authority": "normative",
+      "wire_hex": "f0ffffff",
+      "reason": "reserved bits (4..31) must be zero"
+    },
+    {
+      "id": "len_3",
+      "desc": "3-byte manifest rejected",
+      "class": "size",
+      "authority": "normative",
+      "wire_hex": "000000",
+      "reason": "length 3 != 4"
+    }
+  ]
+}
