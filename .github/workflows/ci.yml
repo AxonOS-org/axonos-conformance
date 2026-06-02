@@ -37,3 +37,29 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: "temurin", java-version: "21" }
       - run: java bindings/java/AxonosRfc0006.java
+  c-ffi:
+    name: C-ABI FFI (shared lib; C + Python ctypes byte parity)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Build shared library and run C + Python consumers
+        run: |
+          cd bindings/c-ffi
+          gcc -O2 -fPIC -shared axonos_rfc0006.c -lm -o libaxonos_rfc0006.so
+          gcc -O2 -Wall -Wextra test_ffi.c -L. -laxonos_rfc0006 -lm -o test_ffi
+          LD_LIBRARY_PATH=. ./test_ffi
+          python3 test_ffi_ctypes.py
+  asm:
+    name: x86-64 assembly encoder (byte parity + cross-check vs C)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble, link, run byte-parity and cross-check
+        run: |
+          cd bindings/asm
+          gcc -O2 -Wall -Wextra test_asm.c axonos_rfc0006_encode.S -o test_asm
+          ./test_asm
+          gcc -O2 -Wall -Wextra fuzz_cross.c ../c-ffi/axonos_rfc0006.c axonos_rfc0006_encode.S -I../c-ffi -lm -o fuzz_cross
+          ./fuzz_cross
