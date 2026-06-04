@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use AxonOS or its conformance suite in your work, please cite it as below."
+title: "axonos-conformance: byte-exact conformance suite for the AxonOS Consent Protocol"
+abstract: >-
+  A byte-identical conformance surface for the AxonOS RFC-0005 capability manifest
+  and RFC-0006 intent wire format. Canonical vectors are emitted from the shipping
+  implementation and re-checked in CI across Rust, Python, C, JavaScript, and Java,
+  with a C-ABI shared library and a hand-written x86-64 assembly encoder.
+type: software
+authors:
+  - family-names: Yermakou
+    given-names: Denis
+    affiliation: "The AxonOS Project"
+license: "Apache-2.0 OR MIT"
+repository-code: "https://github.com/AxonOS-org/axonos-conformance"
+url: "https://axonos.org"
+keywords:
+  - brain-computer interface
+  - conformance
+  - wire format
+  - ABI
+  - no_std
+  - Rust
