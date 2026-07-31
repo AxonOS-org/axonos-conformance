@@ -1,0 +1,146 @@
+{
+  "rfc": "RFC-0009",
+  "title": "Bounded Disclosure of Sealed Neural Data — conformance vectors",
+  "test_version": 1,
+  "constants": {
+    "bits_per_scalar": 32,
+    "log_capacity": 64,
+    "recordable_bits": 2048,
+    "probe_cost_bits": 32
+  },
+  "provenance": "Derived from the release predicate in RFC-0009 §2 and the capacity rule in N5. The information bound itself (Theorem 1) is not a vector: it is a proof about channel width, and no finite set of cases could evidence it. What is pinned here is the arithmetic that enforces it and the refusal ordering an audit depends on.",
+  "valid_vectors": [
+    {
+      "name": "single_scalar_release",
+      "budget_bits": 128,
+      "scalars": 1,
+      "expect": "released",
+      "cost_bits": 32,
+      "remaining_bits": 96,
+      "note": "cost is computed from what the reduction carries, never declared by the requester"
+    },
+    {
+      "name": "eight_channel_reduction",
+      "budget_bits": 1024,
+      "scalars": 8,
+      "expect": "released",
+      "cost_bits": 256,
+      "remaining_bits": 768
+    },
+    {
+      "name": "budget_spent_exactly",
+      "budget_bits": 128,
+      "scalars": 4,
+      "expect": "released",
+      "cost_bits": 128,
+      "remaining_bits": 0,
+      "note": "spending a budget to exactly zero is a release, not a refusal"
+    }
+  ],
+  "boundary_vectors": [
+    {
+      "name": "largest_issuable_grant",
+      "budget_bits": 2048,
+      "expect": "issued",
+      "note": "64 log entries x 32 bits. RFC-0009 N5: a budget the log cannot record is refused at issue, because a ceiling the vault will not honour is not the binding one and no reader of the grant could tell"
+    },
+    {
+      "name": "grant_one_scalar_too_large",
+      "budget_bits": 2080,
+      "expect": "refused_at_issue",
+      "recordable_bits": 2048
+    },
+    {
+      "name": "two_grants_jointly_overcommit",
+      "grants": [
+        1024,
+        1056
+      ],
+      "expect": "second_refused_at_issue",
+      "note": "capacity is shared, so commitments sum; two grants that fit individually and not together are the same defect one step later"
+    },
+    {
+      "name": "reissue_same_id_releases_its_own_commitment",
+      "grants": [
+        {
+          "id": 1,
+          "bits": 2048
+        },
+        {
+          "id": 1,
+          "bits": 2048
+        }
+      ],
+      "expect": "both_issued",
+      "note": "replacing a grant must not double-count the budget it already held"
+    },
+    {
+      "name": "expiry_inclusive",
+      "not_after_us": 1000,
+      "at_us": 1000,
+      "expect": "released",
+      "note": "not_after is inclusive"
+    },
+    {
+      "name": "expiry_exclusive_next_tick",
+      "not_after_us": 1000,
+      "at_us": 1001,
+      "expect": "expired"
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "name": "budget_exhausted",
+      "budget_bits": 96,
+      "releases": 4,
+      "expect": "budget_exhausted",
+      "granted_releases": 3,
+      "note": "the reconstruction attack: honest aggregates repeated are the signal returned one answer at a time, and bits are what stops it"
+    },
+    {
+      "name": "thousand_probes_128_bit_grant",
+      "budget_bits": 128,
+      "probes": 1000,
+      "expect": "budget_exhausted",
+      "answers": 4,
+      "note": "RFC-0009 U2: a refusal that depends on the window is charged, so polling device liveness is finite"
+    },
+    {
+      "name": "withdrawn_outranks_every_other_reason",
+      "withdrawn": true,
+      "expired": true,
+      "wrong_purpose": true,
+      "over_budget": true,
+      "expect": "revoked",
+      "note": "the audit must read the true cause, not whichever check ran first"
+    },
+    {
+      "name": "purpose_mismatch_names_both_sides",
+      "granted": "Calibration",
+      "requested": "Control",
+      "expect": "purpose_mismatch"
+    },
+    {
+      "name": "empty_reduction",
+      "scalars": 0,
+      "expect": "empty_reduction",
+      "note": "refused rather than released at zero cost: a free release is a free probe"
+    },
+    {
+      "name": "reduction_over_empty_window",
+      "support": 0,
+      "expect": "no_support"
+    },
+    {
+      "name": "log_full",
+      "log_entries_used": 64,
+      "expect": "log_full",
+      "note": "releases stop when they cannot be recorded; an unrecorded disclosure is worse than a refused one"
+    },
+    {
+      "name": "unknown_grant",
+      "grant_id": 404,
+      "expect": "no_such_grant"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "rfc": "RFC-0008",
+  "title": "Deadline Closure for the Acquisition Chain — conformance vectors",
+  "test_version": 1,
+  "constants": {
+    "task_set_ns": 694200,
+    "jitter_p999_ns": 6500,
+    "blocking_and_interference_ns": 271300,
+    "utilisation_ceiling_ppm": 250000,
+    "supported_rates_sps": [
+      250,
+      500,
+      1000,
+      2000,
+      4000,
+      8000,
+      16000
+    ],
+    "source": "RFC-0001 (task set, jitter, ceiling) and RFC-0008 §4a (residual)"
+  },
+  "provenance": "Derived from the admission test in RFC-0008 §2, evaluated in integer arithmetic. Every figure traces to a published measurement or to the difference of two of them; none is invented for this file.",
+  "valid_vectors": [
+    {
+      "name": "canonical_250sps",
+      "sps": 250,
+      "expect": "admitted",
+      "period_ns": 4000000,
+      "response_ns": 972000,
+      "utilisation_ppm": 173550,
+      "note": "the canonical rate; RFC-0001 records this task set at U = 0.174"
+    }
+  ],
+  "boundary_vectors": [
+    {
+      "name": "utilisation_exactly_at_ceiling",
+      "sps": 250,
+      "c_ns": 1000000,
+      "expect": "admitted",
+      "utilisation_ppm": 250000,
+      "note": "equality is admitted: the ceiling is 'may occupy at most', not 'below'"
+    },
+    {
+      "name": "utilisation_below_ppm_resolution",
+      "sps": 250,
+      "c_ns": 1000003,
+      "expect": "admitted",
+      "utilisation_ppm": 250000,
+      "note": "Three nanoseconds past the exact ceiling and still admitted, because integer ppm cannot see it. Pinned deliberately: the resolution of the test is part of the test, and an implementation that silently used floating point would differ here."
+    },
+    {
+      "name": "utilisation_one_ppm_over",
+      "sps": 250,
+      "c_ns": 1000004,
+      "expect": "insufficient_margin",
+      "utilisation_ppm": 250001,
+      "note": "The smallest refusable overrun, and it is four nanoseconds rather than one: utilisation is computed in parts per million and one ppm of a 4 ms period is 4 ns, so the test cannot resolve finer. An implementation that refuses at 1_000_001 ns is using different arithmetic and will disagree with this one somewhere it matters."
+    },
+    {
+      "name": "response_exactly_fills_period",
+      "sps": 250,
+      "c_ns": 3722200,
+      "expect": "admitted",
+      "note": "R == D is admitted; the deadline is 'must finish before the next sample arrives', and arriving exactly then has finished The ceiling is relaxed to 100% in this case so that the deadline is the only thing being tested; a vector that omits an input it depends on cannot be re-derived, which is how this file's own checker caught it.",
+      "ceiling_ppm": 1000000
+    },
+    {
+      "name": "response_one_ns_over_period",
+      "sps": 250,
+      "c_ns": 3722201,
+      "expect": "deadline_missed",
+      "note": "one nanosecond past the period is a missed deadline The ceiling is relaxed to 100% in this case so that the deadline is the only thing being tested; a vector that omits an input it depends on cannot be re-derived, which is how this file's own checker caught it.",
+      "ceiling_ppm": 1000000
+    },
+    {
+      "name": "zero_blocking_declared",
+      "sps": 250,
+      "bi_ns": 0,
+      "expect": "admitted",
+      "response_ns": 700700,
+      "note": "RFC-0008 N3: a term set to zero must still be declared. An implementation with no argument for it cannot express this case"
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "name": "500sps_over_ceiling",
+      "sps": 500,
+      "expect": "insufficient_margin",
+      "utilisation_ppm": 347100,
+      "limit_ppm": 250000,
+      "note": "the deadline itself is met; the published ceiling refuses it. An implementation that admits this has no ceiling, or a different one"
+    },
+    {
+      "name": "1000sps_over_ceiling",
+      "sps": 1000,
+      "expect": "insufficient_margin",
+      "utilisation_ppm": 694200,
+      "limit_ppm": 250000,
+      "note": "the deadline itself is met; the published ceiling refuses it. An implementation that admits this has no ceiling, or a different one"
+    },
+    {
+      "name": "2000sps_deadline",
+      "sps": 2000,
+      "expect": "deadline_missed",
+      "needed_ns": 972000,
+      "available_ns": 500000,
+      "note": "the only row refused by the deadline rather than by the ceiling; reporting the others this way conflates two distinct refusals"
+    },
+    {
+      "name": "4000sps_deadline",
+      "sps": 4000,
+      "expect": "deadline_missed",
+      "needed_ns": 972000,
+      "available_ns": 250000
+    },
+    {
+      "name": "8000sps_deadline",
+      "sps": 8000,
+      "expect": "deadline_missed",
+      "needed_ns": 972000,
+      "available_ns": 125000
+    },
+    {
+      "name": "16000sps_deadline",
+      "sps": 16000,
+      "expect": "deadline_missed",
+      "needed_ns": 972000,
+      "available_ns": 62500
+    },
+    {
+      "name": "rate_0_unsupported",
+      "sps": 0,
+      "expect": "unsupported_rate",
+      "note": "a rate the front end cannot produce is refused, not approximated"
+    },
+    {
+      "name": "rate_300_unsupported",
+      "sps": 300,
+      "expect": "unsupported_rate",
+      "note": "a rate the front end cannot produce is refused, not approximated"
+    },
+    {
+      "name": "rate_249_unsupported",
+      "sps": 249,
+      "expect": "unsupported_rate",
+      "note": "a rate the front end cannot produce is refused, not approximated"
+    },
+    {
+      "name": "rate_251_unsupported",
+      "sps": 251,
+      "expect": "unsupported_rate",
+      "note": "a rate the front end cannot produce is refused, not approximated"
+    },
+    {
+      "name": "rate_1000000_unsupported",
+      "sps": 1000000,
+      "expect": "unsupported_rate",
+      "note": "a rate the front end cannot produce is refused, not approximated"
+    }
+  ]
+}
