@@ -10,7 +10,9 @@ type: software
 authors:
   - family-names: Yermakou
     given-names: Denis
+    email: "connect@axonos.org"
     affiliation: "The AxonOS Project"
+    website: "https://axonos.org"
 license: "Apache-2.0 OR MIT"
 repository-code: "https://github.com/AxonOS-org/axonos-conformance"
 url: "https://axonos.org"
@@ -21,3 +23,22 @@ keywords:
   - ABI
   - no_std
   - Rust
+
+# The version of the conformance suite.
+#
+# This file had none. A citation file exists to say which version somebody is
+# citing, and this one named a title, an abstract, an author and a licence
+# while leaving unanswered the question it was written to answer — so anyone
+# citing it cited "the conformance suite", which cannot be checked later.
+#
+# It is also the only place this repository states a version: there is no
+# manifest, because a suite of vectors is not a package. The radar's card
+# generator reads it here, and reported this project as Planned until the field
+# existed.
+#
+# Matches the v1.1.0 tag. Bumped when a vector changes or a language is added,
+# not when prose is edited.
+version: "1.1.0"
+date-released: "2026-08-13"
+repository-code: "https://github.com/AxonOS-org/axonos-conformance"
+url: "https://axonos.org"
