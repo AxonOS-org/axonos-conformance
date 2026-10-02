@@ -9,6 +9,7 @@
 &nbsp;![parity](https://img.shields.io/badge/Rust%20%E2%89%A1%20Python%20%E2%89%A1%20C%20%E2%89%A1%20JS%20%E2%89%A1%20Java-byte--identical-0d7a5f?style=flat-square)
 &nbsp;![deps](https://img.shields.io/badge/dependencies-none-475569?style=flat-square)
 &nbsp;![license](https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-475569?style=flat-square)
+&nbsp;[![AxonOS Radar](https://img.shields.io/badge/AxonOS%20Radar-open%20neurotech%20map-1f8fae?style=flat-square&labelColor=0b1220)](https://axonos-bci.github.io/axonos-community-radar/)
 
 </div>
 
